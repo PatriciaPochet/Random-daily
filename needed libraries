@@ -1,0 +1,9 @@
+!pip install colorama
+
+import random
+import time
+import colorama
+from colorama import Fore
+from colorama import Style
+import IPython.display as display
+from PIL import Image
