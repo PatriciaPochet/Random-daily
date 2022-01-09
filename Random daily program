@@ -1,0 +1,59 @@
+# function creation so I can launch the program in another cell of my google colab by calling the function
+# better for the presentation 
+
+def random_daily():
+    colors = [Fore.BLUE, Fore.YELLOW, Fore.RED, Fore.GREEN, Fore.MAGENTA]
+    students = list(data_blue.keys())                 # student names list from the data_blue dictionnary
+    students_already_cited = []                       # new list to store students already cited 
+    yes = ['oui', 'ouais', 'yep', 'yes']              # confirmation list for the input "ready to go?"
+    ok = ['ok', 'parfait', 'ok, impec !', 'ok, top !', "ok, let's go!"]  # answers list to print if student is there
+    display.display(Image.open('/content/happy_ny.jpg'))   # display happy new year image 
+    print()
+    time.sleep(5)
+    print('Une excellente nouvelle année à tous pleine de surprises, de succès et de rires !')
+    time.sleep(2)
+    print('Eh oui ! il en fallait un ... le 3ème module random créé pour le daily est un module python ! :-)')
+    time.sleep(2)
+    print("So let's go! Et place à la technique !")
+    time.sleep(2)
+    print()
+    input('On lance le premier daily de 2022 ? ')       # to control the program launch
+    print()
+    previous_color = ''                                 # to deal with color change for each student
+    while len(students_already_cited) != len(students):
+        student = random.choice(students)    
+        if data_blue[student]['color'] == None:
+            color = random.choice(colors)
+        else:
+            color = data_blue[student]['color']         # for some students a color has been chosen according to the text introduction
+            
+        if student not in students_already_cited and (color != previous_color or data_blue[student]['color'] != None):
+        # conditions : students not already cited for the daily, color different from the previous student except if it is a student for which a color is wanted 
+        
+            for loop in range(len(data_blue[student]['intro'])):                    # to print text introduction line by line
+                print(color + data_blue[student]['intro'][loop] + Style.RESET_ALL)  # to print the text with the color chosen
+                time.sleep(3)                                                       # to let time for people to guess the student
+            print()   
+            print(color + student.center(30, '*') + Style.RESET_ALL)    # to print the student name always at the same place with * before and after the name
+            print()
+            confirmation = input('Ready to go? ')                       # input to manage late or absent student 
+            if confirmation in yes:                                     # if student is there and ready to take his turn, write a word from the yes list
+                students_already_cited.append(student)
+                previous_color = color                                  # to deal with color condition 
+                print(random.choice(ok))                                # to print an answer to the confirmation
+                time.sleep(90)                                          # to give time to the student to speak but not too long if he doesn't have too much to say
+                print()
+                if len(students_already_cited) == len(students):        # to avoid the print of "suivant?" before the end announcement
+                    break
+                input('Suivant ? ')                                     # to control the launch of the selection and introduction of the following student
+                print()
+            elif confirmation == 'Absent' or confirmation == 'absent':  # if one of the student is absent that day 
+                students_already_cited.append(student)                  # so the student is not cited again
+                print("ok, c'est noté ! Suivant donc !")                # matching answer
+                print()
+            else:
+                print("ok partie remise !")                             # if one of the student is late and has to be cited again - in that case, we answer any word,  
+                print()                                                 # except the ones of the "yes" list or absent/Absent to the confirmation question
+    
+    # final message to end the random daily program
+    print('\nLe tour de table est terminé, chacun de vous a parlé. \nMerci pour votre participation et pour ce daily ! \nExcellente journée à tous !')
